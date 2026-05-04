@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dual Authenticator Login Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="script.js" defer></script>
+
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 48 48" fill="none" aria-label="Dual factor shield logo">
+          <path d="M24 4 39 10v11c0 9.2-5.7 17.4-15 22-9.3-4.6-15-12.8-15-22V10L24 4Z" stroke="currentColor" stroke-width="3"/>
+          <path d="M24 15v18M15 24h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <span>Dual Authenticator Login</span>
+      </div>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </header>
+
+    <main id="main" class="hero">
+      <section class="intro" aria-labelledby="intro-title">
+        <div class="badge-row">
+          <span class="badge">Static HTML demo</span>
+          <span class="badge">Dual TOTP</span>
+        </div>
+        <h1 id="intro-title">Login Site with Dual Authenticator Support</h1>
+        <p>The demonstration site shows one TOTP secret for Google Authenticator and a second TOTP secret for Microsoft Authenticator. It then lets the user sign in with either Google Authenticator or Microsoft Authenticator respectively.</p>
+        <p class="tiny"><strong>Important:</strong> Google Authenticator and Microsoft Authenticator both support standard TOTP, so in real systems either app can usually scan either QR code. This page labels one QR for each appllication to verify the setup for each app.</p>
+        <ul>
+          <li>Open HTML file in VS Code and run it with Live Server / browser.</li>
+          <li>Click <strong>Generate setup</strong> to create the two QR codes.</li>
+          <li>Enter the username & password, and then provide either the Google/Microsoft code to simulate the login.</li>
+        </ul>
+      </section>
+
+      <section class="panel" aria-labelledby="login-title">
+        <h2 id="login-title">Sign in</h2>
+        <form id="loginForm" class="grid" novalidate>
+          <div class="field">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" placeholder="admin" autocomplete="username" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="Password123!" autocomplete="current-password" required />
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-secondary" id="generateBtn">Generate setup</button>
+            <button type="button" class="btn btn-secondary" id="fillDemoBtn">Use demo credentials</button>
+          </div>
+
+          <div class="setup" aria-live="polite">
+            <article class="setup-card">
+              <h3>Google Authenticator</h3>
+              <p class="tiny">Scan this QR code in Google Authenticator.</p>
+              <div id="googleSecret" class="secret">Not generated yet.</div>
+              <div id="googleQr" class="qr" aria-label="Google Authenticator QR code"></div>
+            </article>
+            <article class="setup-card">
+              <h3>Microsoft Authenticator</h3>
+              <p class="tiny">Scan this QR code in Microsoft Authenticator.</p>
+              <div id="microsoftSecret" class="secret">Not generated yet.</div>
+              <div id="microsoftQr" class="qr" aria-label="Microsoft Authenticator QR code"></div>
+            </article>
+          </div>
+
+          <div class="code-row">
+            <div class="field">
+              <label for="googleCode">Google Code Input:</label>
+              <input id="googleCode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="123456" required />
+            </div>
+            <div class="field">
+              <label for="microsoftCode">Microsoft Code Input:</label>
+              <input id="microsoftCode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="654321" required />
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" class="btn btn-primary">Login with 2FA</button>
+            <button type="button" class="btn btn-secondary" id="copySecretsBtn">Copy Secrets</button>
+          </div>
+
+          <div id="status" class="status warn">Generate setup first, then scan one QR code. You can log in with either authenticator app.</div>
+          <div id="successCard" class="success-card">
+            <strong>Login successful.</strong>
+            <div class="tiny">One valid authenticator check matched the current time window.</div>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  
